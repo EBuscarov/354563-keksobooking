@@ -69,3 +69,7 @@ for (i = 0; i < 8; i++) {
     y: locationY()
   });
 }
+
+// Удаляем класс .map--faded
+var switchMap = document.querySelector('.map');
+switchMap.classList.remove('map--faded');
