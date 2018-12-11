@@ -41,7 +41,7 @@ var ads = [];
 for (var i = 0; i < OBJECTS; i++) {
   ads.push({
     author: {
-      avatar: 'img/avatar/user0' + i + '.png'
+      avatar: 'img/avatars/user0' + (i + 1) + '.png'
     },
     offer: {
       title: TITLE[Math.floor(Math.random() * TITLE.length)],
@@ -77,10 +77,10 @@ var pinMapTemplate = document.querySelector('#pin')
 var renderPin = function () {
   var pinElement = pinMapTemplate.cloneNode(true);
 
-  pinElement.style.left = location.x + 'px';
-  pinElement.style.top = location.y + 'px';
-  pinElement.src = ads[i].author.avatar[i];
-  pinElement.alt = ads[i].offer.title;
+  pinElement.style.left = ads[i].location.x + 'px';
+  pinElement.style.top = ads[i].location.y + 'px';
+  pinElement.querySelector('img').src = ads[i].author.avatar;
+  pinElement.querySelector('img').alt = ads[i].offer.title;
 
   return pinElement;
 };
