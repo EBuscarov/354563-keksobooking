@@ -1,16 +1,16 @@
 'use strict';
 
-var ADS_OBJECT = 8;
-var ADS_TITLE = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
+var ADS_COUNT = 8;
+var AD_TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
 var MIN_PRICE = 1000;
 var MAX_PRICE = 1000000;
-var ADS_TYPE = ['palace', 'flat', 'house', 'bungalo'];
+var AD_TYPES = ['palace', 'flat', 'house', 'bungalo'];
 var MIN_ROOMS = 1;
 var MAX_ROOMS = 5;
-var ADS_CHECKIN = ['12:00', '13:00', '14:00'];
-var ADS_CHECKOUT = ['12:00', '13:00', '14:00'];
-var ADS_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-var ADS_PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
+var AD_CHECKINS = ['12:00', '13:00', '14:00'];
+var AD_CHECKOUTS = ['12:00', '13:00', '14:00'];
+var AD_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+var AD_PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 var MIN_X = 0;
 var MAX_X = 1200;
 var MIN_Y = 130;
@@ -27,7 +27,7 @@ var getRandomInt = function (min, max) {
 };
 
 var getRandomGuests = function () {
-  return Math.floor(Math.random() * (getRandomInt(MIN_ROOMS, MAX_ROOMS) - MIN_ROOMS + 1) + MIN_ROOMS);
+  return getRandomInt(MIN_ROOMS, MAX_ROOMS);
 };
 
 var getRandomElement = function (array) {
@@ -37,23 +37,23 @@ var getRandomElement = function (array) {
 
 // Массив из 8 объектов
 var ads = [];
-for (var i = 0; i < ADS_OBJECT; i++) {
+for (var i = 0; i < ADS_COUNT; i++) {
   ads.push({
     author: {
       avatar: 'img/avatars/user0' + (i + 1) + '.png'
     },
     offer: {
-      title: getRandomElement(ADS_TITLE),
+      title: getRandomElement(AD_TITLES),
       address: null,
       price: getRandomInt(MIN_PRICE, MAX_PRICE),
       rooms: getRandomInt(MIN_ROOMS, MAX_ROOMS),
       guests: getRandomGuests(),
-      type: getRandomElement(ADS_TYPE),
-      checkin: getRandomElement(ADS_CHECKIN),
-      checkout: getRandomElement(ADS_CHECKOUT),
-      features: ADS_FEATURES,
+      type: getRandomElement(AD_TYPES),
+      checkin: getRandomElement(AD_CHECKINS),
+      checkout: getRandomElement(AD_CHECKOUTS),
+      features: AD_FEATURES,
       description: null,
-      photos: ADS_PHOTOS,
+      photos: AD_PHOTOS,
     },
     location: {
       x: getRandomInt(MIN_X, MAX_X),
