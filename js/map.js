@@ -63,6 +63,7 @@ for (var i = 0; i < ADS_COUNT; i++) {
   ads[i].offer.address = ads[i].location.x + ', ' + ads[i].location.y;
 }
 
+/*
 // Удаляем класс .map--faded
 var switchMap = document.querySelector('.map');
 switchMap.classList.remove('map--faded');
@@ -128,3 +129,4 @@ var renderCard = function (dataCard) {
 fragment = document.createDocumentFragment();
 fragment.appendChild(renderCard(ads[0]));
 cardListElement.insertBefore(fragment, blockListElement);
+*/
