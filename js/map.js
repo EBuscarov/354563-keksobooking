@@ -21,6 +21,8 @@ var HOUSING_NAMES = {
   house: 'Дом',
   bungalo: 'Бунгало'
 };
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
 
 var getRandomInt = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -63,11 +65,6 @@ for (var i = 0; i < ADS_COUNT; i++) {
   ads[i].offer.address = ads[i].location.x + ', ' + ads[i].location.y;
 }
 
-/*
-// Удаляем класс .map--faded
-var switchMap = document.querySelector('.map');
-switchMap.classList.remove('map--faded');
-
 // Отоброжаем метки на карте
 var pinListElement = document.querySelector('.map__pins');
 var pinMapTemplate = document.querySelector('#pin')
@@ -84,12 +81,6 @@ var renderPin = function (dataPin) {
 
   return pinElement;
 };
-
-var fragment = document.createDocumentFragment();
-for (i = 0; i < ads.length; i++) {
-  fragment.appendChild(renderPin(ads[i]));
-}
-pinListElement.appendChild(fragment);
 
 // Отоброжаем карточку объявления
 var cardListElement = document.querySelector('.map');
@@ -126,7 +117,36 @@ var renderCard = function (dataCard) {
   return cardElement;
 };
 
-fragment = document.createDocumentFragment();
-fragment.appendChild(renderCard(ads[0]));
-cardListElement.insertBefore(fragment, blockListElement);
-*/
+// #16 Личный проект: подробности
+var fieldsetAttribute = document.querySelectorAll('fieldset');
+
+for (i = 0; i < fieldsetAttribute.length; i++) {
+  fieldsetAttribute[i].setAttribute('disabled', '');
+}
+
+var cardBlock = document.querySelector('.map');
+var adForm = document.querySelector('.ad-form');
+var pinMap = document.querySelector('.map__pin--main');
+var fieldAddress = document.getElementById('address');
+
+var pageActivation = function () {
+  cardBlock.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  fieldAddress.setAttribute('value', ads[0].offer.address);
+  for (i = 0; i < fieldsetAttribute.length; i++) {
+    fieldsetAttribute[i].removeAttribute('disabled', '');
+  }
+
+  var fragment = document.createDocumentFragment();
+  for (i = 0; i < ads.length; i++) {
+    fragment.appendChild(renderPin(ads[i]));
+  }
+  pinListElement.appendChild(fragment);
+
+  fragment = document.createDocumentFragment();
+  fragment.appendChild(renderCard(ads[0]));
+  cardListElement.insertBefore(fragment, blockListElement);
+};
+
+// отпускание пина
+pinMap.addEventListener('mouseup', pageActivation);
