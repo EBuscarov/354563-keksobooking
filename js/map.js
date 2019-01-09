@@ -21,8 +21,9 @@ var HOUSING_NAMES = {
   house: 'Дом',
   bungalo: 'Бунгало'
 };
+var PIN_SIZE = 62;
+var PIN_LEG = 22;
 var ESC_KEYCODE = 27;
-var ENTER_KEYCODE = 13;
 
 var getRandomInt = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -65,7 +66,8 @@ for (var i = 0; i < ADS_COUNT; i++) {
   ads[i].offer.address = ads[i].location.x + ', ' + ads[i].location.y;
 }
 
-// Отоброжаем метки на карте
+// Метки объявлений на карте
+var mapPinElement = document.querySelector('.map__pin');
 var pinListElement = document.querySelector('.map__pins');
 var pinMapTemplate = document.querySelector('#pin')
     .content
@@ -76,13 +78,22 @@ var renderPin = function (dataPin) {
 
   pinElement.style.left = dataPin.location.x + 'px';
   pinElement.style.top = dataPin.location.y + 'px';
+  pinElement.dataset.id = i + 1; // Добавил атрибут dataset шаблону метки объявления
   pinElement.querySelector('img').src = dataPin.author.avatar;
   pinElement.querySelector('img').alt = dataPin.offer.title;
 
   return pinElement;
 };
 
-// Отоброжаем карточку объявления
+var renderFragmentPin = function () {
+  var fragment = document.createDocumentFragment();
+  for (i = 0; i < ads.length; i++) {
+    fragment.appendChild(renderPin(ads[i]));
+  }
+  pinListElement.appendChild(fragment);
+};
+
+// Карточка объявления
 var cardListElement = document.querySelector('.map');
 var blockListElement = document.querySelector('.map__filters-container');
 var cardMapTemplate = document.querySelector('#card')
@@ -103,7 +114,7 @@ var renderCard = function (dataCard) {
 
   cardElement.querySelector('.popup__avatar').src = dataCard.author.avatar;
 
-  // Отображаем фотографии в карточке объявления
+  // Фотография в карточке объявления
   var photoListElement = cardElement.querySelector('.popup__photos');
   var photoTemplate = cardElement.querySelector('.popup__photo');
   var photoElement = photoListElement.removeChild(photoTemplate);
@@ -117,36 +128,59 @@ var renderCard = function (dataCard) {
   return cardElement;
 };
 
+/*var renderFragmentCard = function () {
+  var fragment = document.createDocumentFragment();
+  fragment.appendChild(renderCard(ads[0]));
+  cardListElement.insertBefore(fragment, blockListElement);
+};*/
+
 // #16 Личный проект: подробности
+// Неактивное состояние
 var fieldsetAttribute = document.querySelectorAll('fieldset');
 
 for (i = 0; i < fieldsetAttribute.length; i++) {
   fieldsetAttribute[i].setAttribute('disabled', '');
 }
 
+// Активация страницы
 var cardBlock = document.querySelector('.map');
 var adForm = document.querySelector('.ad-form');
-var pinMap = document.querySelector('.map__pin--main');
+var mainPin = document.querySelector('.map__pin--main');
 var fieldAddress = document.getElementById('address');
+var mainPinX = parseInt(mainPin.style.left, 10) + PIN_SIZE / 2;
+var mainPinY = parseInt(mainPin.style.top, 10) + PIN_SIZE / 2;
 
-var pageActivation = function () {
+var onButtonMouseup = function () {
   cardBlock.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
-  fieldAddress.setAttribute('value', ads[0].offer.address);
   for (i = 0; i < fieldsetAttribute.length; i++) {
     fieldsetAttribute[i].removeAttribute('disabled', '');
   }
-
-  var fragment = document.createDocumentFragment();
-  for (i = 0; i < ads.length; i++) {
-    fragment.appendChild(renderPin(ads[i]));
-  }
-  pinListElement.appendChild(fragment);
-
-  fragment = document.createDocumentFragment();
-  fragment.appendChild(renderCard(ads[0]));
-  cardListElement.insertBefore(fragment, blockListElement);
+  renderFragmentPin();
 };
 
-// отпускание пина
-pinMap.addEventListener('mouseup', pageActivation);
+mainPin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+
+  fieldAddress.setAttribute('value', mainPinX + ', ' + mainPinY);
+
+  // Отпускание пина
+  mainPin.addEventListener('mouseup', onButtonMouseup);
+});
+
+// Просмотр подробной информации о похожих объявлениях
+// в обрабочике достаём из дата атрибута индекс.
+// потом по этому индексу из массива - объект с данными.
+// а из объекта генерим карточку
+
+var dataAttribute = document.querySelector('button', '.map__pin');
+
+
+mapPinElement.addEventListener('click', buttonClickHandler);
+
+/*
+var startCoords = {
+  x: evt.clientX,
+  y: evt.clientY
+};
+*/
